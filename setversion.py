@@ -3,25 +3,23 @@
 
 
 def fileProcess( name, lineFunction ):
-	filestream = open( name, 'r' )
-	if filestream.closed:
-		print( "file " + name + " not open." )
-		return
+	with open( name, 'r' ) as filestream:
+		if filestream.closed:
+			print(f"file {name} not open.")
+			return
 
-	output = ""
-	print( "--- Processing " + name + " ---------" )
-	while 1:
-		line = filestream.readline()
-		if not line: break
-		output += lineFunction( line )
-	filestream.close()
-	
+		output = ""
+		print(f"--- Processing {name} ---------")
+		while 1:
+			if line := filestream.readline():
+				output += lineFunction( line )
+			else:
+				break
 	if not output: return			# basic error checking
-	
-	print( "Writing file " + name )
-	filestream = open( name, "w" );
-	filestream.write( output );
-	filestream.close()
+
+	print(f"Writing file {name}")
+	with open( name, "w" ) as filestream:
+		filestream.write( output );
 	
 	
 def echoInput( line ):
